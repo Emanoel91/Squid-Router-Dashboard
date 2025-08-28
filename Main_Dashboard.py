@@ -336,7 +336,7 @@ def load_time_series_data(timeframe, start_date, end_date):
         ROUND(SUM(amount_usd)) AS Bridged_Volume,
         SUM(Bridged_Volume) OVER (ORDER BY Date) AS Total_Bridged_Volume,
         SUM(Number_of_Bridges) OVER (ORDER BY Date) AS Total_Number_of_Bridges,
-        round(COUNT(DISTINCT id)/COUNT(DISTINCT user)) as Avg_Bridge_Count_per_User,
+        round((COUNT(DISTINCT id)/COUNT(DISTINCT user)),1) as Avg_Bridge_Count_per_User,
         avg(amount_usd) as Avg_Bridged_Volume
     FROM axelar_service
     WHERE created_at::date >= '{start_str}' 
