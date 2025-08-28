@@ -72,9 +72,16 @@ conn = snowflake.connector.connect(
 )
 
 # --- Date Inputs ---------------------------------------------------------------------------------------------------
-timeframe = st.selectbox("Select Time Frame", ["month", "week", "day"])
-start_date = st.date_input("Start Date", value=pd.to_datetime("2024-01-01"))
-end_date = st.date_input("End Date", value=pd.to_datetime("2025-08-31"))
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    timeframe = st.selectbox("Select Time Frame", ["month", "week", "day"])
+
+with col2:
+    start_date = st.date_input("Start Date", value=pd.to_datetime("2024-01-01"))
+
+with col3:
+    end_date = st.date_input("End Date", value=pd.to_datetime("2025-08-31"))
 # --- Query Function: Row1 --------------------------------------------------------------------------------------
 @st.cache_data
 def load_kpi_data(timeframe, start_date, end_date):
