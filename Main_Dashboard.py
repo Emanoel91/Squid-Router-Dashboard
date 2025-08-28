@@ -563,37 +563,48 @@ def load_source_chain_data(start_date, end_date):
 df_source = load_source_chain_data(start_date, end_date)
 
 # --- Row 5: Top 10 Horizontal Bar Charts ----------------------------------------------------------------------------------
-top_vol = df_source.nlargest(10, "Volume of Transfers (USD)")
-top_txn = df_source.nlargest(10, "Number of Transfers")
-
 col1, col2 = st.columns(2)
 
 with col1:
+    top_vol_sorted = top_vol.sort_values("Volume of Transfers (USD)")
     fig1 = px.bar(
-        top_vol.sort_values("Volume of Transfers (USD)"),
+        top_vol_sorted,
         x="Source Chain",
         y="Volume of Transfers (USD)",
         title="Top 10 Source Chains by Volume (USD)",
         labels={"Volume of Transfers (USD)": "USD", "Source Chain": " "},
         color_discrete_sequence=["#ca99e5"]
     )
-
-    fig1.update_traces(text=top_vol.sort_values("Volume of Transfers (USD)")["Volume of Transfers (USD)"],
-                       textposition="outside")
+    fig1.update_traces(
+        text=top_vol_sorted["Volume of Transfers (USD)"],
+        textposition="outside"
+    )
+    fig1.update_xaxes(
+        categoryorder="array",
+        categoryarray=top_vol_sorted["Source Chain"].tolist()
+    )
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
+    top_txn_sorted = top_txn.sort_values("Number of Transfers")
     fig2 = px.bar(
-        top_txn.sort_values("Number of Transfers"),
+        top_txn_sorted,
         x="Source Chain",
         y="Number of Transfers",
         title="Top 10 Source Chains by Transfers",
         labels={"Number of Transfers": "Txns count", "Source Chain": " "},
         color_discrete_sequence=["#ca99e5"]
     )
-    fig2.update_traces(text=top_txn.sort_values("Number of Transfers")["Number of Transfers"],
-                       textposition="outside")
+    fig2.update_traces(
+        text=top_txn_sorted["Number of Transfers"],
+        textposition="outside"
+    )
+    fig2.update_xaxes(
+        categoryorder="array",
+        categoryarray=top_txn_sorted["Source Chain"].tolist()
+    )
     st.plotly_chart(fig2, use_container_width=True)
+
 
 # --- Destination Chain Data Query: Row 6 --------------------------------------------------------------------------------------------------------------
 @st.cache_data
