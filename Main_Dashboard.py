@@ -221,17 +221,17 @@ col1, col2, col3 = st.columns(3)
 
 col1.metric(
     label="Median Bridged Volume",
-    value=f"${df_kpi['Median_Bridged_Volume'][0]:,}"
+    value=f"${df_kpi['MEDIAN_BRIDGED_VOLUME'][0]:,}"
 )
 
 col2.metric(
     label="Maximum Bridged Volume",
-    value=f"${df_kpi['Maximum_Bridged_Volume'][0]:,}"
+    value=f"${df_kpi['MAXIMUM_BRIDGED_VOLUME'][0]:,}"
 )
 
 col3.metric(
     label="Average Bridged Volume",
-    value=f"${df_kpi['Average_Bridged_Volume'][0]:,}"
+    value=f"${df_kpi['AVERAGE_BRIDGED_VOLUME'][0]:,}"
 )
 
 # --- Query Function: Row (2) --------------------------------------------------------------------------------------
