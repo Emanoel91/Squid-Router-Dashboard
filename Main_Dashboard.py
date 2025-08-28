@@ -417,7 +417,14 @@ with col1:
 
 with col2:
     fig2 = go.Figure()
-    fig2.add_bar(x=df_ts["DATE"], y=df_ts["AVG_BRIDGED_VOLUME"], name="Avg Bridged Volume", yaxis="y1", mode="lines+markers")
+    fig2.add_trace(
+        go.Scatter(
+            x=df_ts["DATE"],
+            y=df_ts["AVG_BRIDGED_VOLUME"],
+            name="Avg Bridged Volume",
+            mode="lines+markers"
+        )
+    )
     fig2.update_layout(
         title="Avg Bridged Volume per Transaction Over Time",
         yaxis=dict(title="$USD"),
