@@ -234,7 +234,7 @@ col3.metric(
     value=f"${df_kpi['AVERAGE_BRIDGED_VOLUME'][0]:,}"
 )
 
-# --- Query Function: Row (3) --------------------------------------------------------------------------------------
+# --- Query Function: Row (3,4) --------------------------------------------------------------------------------------
 @st.cache_data
 def load_time_series_data(timeframe, start_date, end_date):
     start_str = start_date.strftime("%Y-%m-%d")
@@ -349,7 +349,7 @@ def load_time_series_data(timeframe, start_date, end_date):
 
 # --- Load Data ----------------------------------------------------------------------------------------------------
 df_ts = load_time_series_data(timeframe, start_date, end_date)
-
+# --- Row 3 --------------------------------------------------------------------------------------------------------
 col1, col2 = st.columns(2)
 
 with col1:
@@ -392,7 +392,7 @@ with col2:
     )
     st.plotly_chart(fig2, use_container_width=True)
 
-
+# --- Row 4 --------------------------------------------------------------------------------------------------------
 col1, col2 = st.columns(2)
 
 with col1:
@@ -449,8 +449,7 @@ with col2:
     )
     st.plotly_chart(fig2, use_container_width=True)
 
-# ----------------------------------------------------------------------------------------------------------------------------
-# --- Query Function: Row (3) ------------------------------------------------------------------------------------------------
+# --- Query Function: Row (5) -------------------------------------------------------------------------------------------------------------------------------------------------
 @st.cache_data
 def load_source_chain_data(start_date, end_date):
     start_str = start_date.strftime("%Y-%m-%d")
@@ -563,20 +562,11 @@ def load_source_chain_data(start_date, end_date):
 # --- Load Data ----------------------------------------------------------------------------------------------------
 df_source = load_source_chain_data(start_date, end_date)
 
-# --- Display Table ------------------------------------------------------------------------------------------------
-st.subheader("📤Squid Activity by Source Chain")
-
-df_display = df_source.copy()
-df_display.index = df_display.index + 1
-df_display = df_display.applymap(lambda x: f"{x:,}" if isinstance(x, (int, float)) else x)
-st.dataframe(df_display, use_container_width=True)
-
 # --- Top 10 Horizontal Bar Charts ----------------------------------------------------------------------------------
 top_vol = df_source.nlargest(10, "Volume of Transfers (USD)")
 top_txn = df_source.nlargest(10, "Number of Transfers")
-top_usr = df_source.nlargest(10, "Number of Users")
 
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 
 with col1:
     fig1 = px.bar(
@@ -599,17 +589,6 @@ with col2:
         color_discrete_sequence=["#ca99e5"]
     )
     st.plotly_chart(fig2, use_container_width=True)
-
-with col3:
-    fig3 = px.bar(
-        top_usr.sort_values("Number of Users"),
-        x="Number of Users", y="Source Chain",
-        orientation="h",
-        title="Top 10 Source Chains by Users",
-        labels={"Number of Users": "Address count", "Source Chain": " "},
-        color_discrete_sequence=["#ca99e5"]
-    )
-    st.plotly_chart(fig3, use_container_width=True)
 
 # --- Destination Chain Data Query: Row 5, 6 --------------------------------------------------------------------------------------------------------------
 @st.cache_data
