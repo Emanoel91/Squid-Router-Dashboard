@@ -336,7 +336,7 @@ def load_time_series_data(timeframe, start_date, end_date):
         ROUND(SUM(amount_usd)) AS Bridged_Volume,
         SUM(Bridged_Volume) OVER (ORDER BY Date) AS Total_Bridged_Volume,
         SUM(Number_of_Bridges) OVER (ORDER BY Date) AS Total_Number_of_Bridges,
-        round(COUNT(DISTINCT id)/COUNT(DISTINCT user)) as Avg_Bridge_per_User,
+        round(COUNT(DISTINCT id)/COUNT(DISTINCT user)) as Avg_Bridge_Count_per_User,
         avg(amount_usd) as Avg_Bridged_Volume
     FROM axelar_service
     WHERE created_at::date >= '{start_str}' 
@@ -377,7 +377,7 @@ with col2:
     fig2.add_bar(x=df_ts["DATE"], y=df_ts["BRIDGED_VOLUME"], name="Bridged Volume", yaxis="y1")
     fig2.add_trace(go.Scatter(x=df_ts["DATE"], y=df_ts["TOTAL_BRIDGED_VOLUME"], name="Total Bridged Volume", mode="lines+markers", yaxis="y2"))
     fig2.update_layout(
-        title="Volume of Transfers Over Time",
+        title="Bridged Volume Over Time",
         yaxis=dict(title="$USD"),
         yaxis2=dict(title="$USD", overlaying="y", side="right"),
         xaxis=dict(title=" "),
@@ -389,6 +389,39 @@ with col2:
         xanchor="center",  
         x=0.5
     )
+    )
+    st.plotly_chart(fig2, use_container_width=True)
+
+
+col1, col2 = st.columns(2)
+
+with col1:
+    fig1 = go.Figure()
+    fig1.add_bar(x=df_ts["DATE"], y=df_ts["NUMBER_OF_BRIDGERS"], name="Number of Bridgers", yaxis="y1")
+    fig1.add_trace(go.Scatter(x=df_ts["DATE"], y=df_ts["AVG_BRIDGE_COUNT_PER_USER"], name="Avg Bridge Count per User", mode="lines+markers", yaxis="y2"))
+    fig1.update_layout(
+        title="Number of Bridgers Over Time",
+        yaxis=dict(title="User count"),
+        yaxis2=dict(title="Txns count", overlaying="y", side="right"),
+        xaxis=dict(title=" "),
+        barmode="group",
+        legend=dict(
+        orientation="h",   
+        yanchor="bottom", 
+        y=1.05,           
+        xanchor="center",  
+        x=0.5
+    )
+    )
+    st.plotly_chart(fig1, use_container_width=True)
+
+with col2:
+    fig2 = go.Figure()
+    fig2.add_bar(x=df_ts["DATE"], y=df_ts["AVG_BRIDGED_VOLUME"], name="Avg Bridged Volume", yaxis="y1", mode="lines+markers")
+    fig2.update_layout(
+        title="Avg Bridged Volume per Transaction Over Time",
+        yaxis=dict(title="$USD"),
+        xaxis=dict(title=" ")
     )
     st.plotly_chart(fig2, use_container_width=True)
 
