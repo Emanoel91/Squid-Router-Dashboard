@@ -592,7 +592,7 @@ with col2:
     )
     fig2.update_traces(texttemplate='%{text}', textposition='outside')
     fig2.update_layout(xaxis={'categoryorder':'total descending'})
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig2, use_container_width=True) 
 
 # --- Destination Chain Data Query: Row 6 --------------------------------------------------------------------------------------------------------------
 @st.cache_data
