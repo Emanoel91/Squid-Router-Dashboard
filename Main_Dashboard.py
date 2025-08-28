@@ -331,9 +331,13 @@ def load_time_series_data(timeframe, start_date, end_date):
     )
     SELECT 
         DATE_TRUNC('{timeframe}', created_at) AS Date,
-        COUNT(DISTINCT id) AS Number_of_Transfers, 
-        COUNT(DISTINCT user) AS Number_of_Users, 
-        ROUND(SUM(amount_usd)) AS Volume_of_Transfers
+        COUNT(DISTINCT id) AS Number_of_Bridges, 
+        COUNT(DISTINCT user) AS Number_of_Bridgers, 
+        ROUND(SUM(amount_usd)) AS Bridged_Volume,
+        SUM(Bridged_Volume) OVER (ORDER BY Date) AS Total_Bridged_Volume,
+        SUM(Number_of_Bridges) OVER (ORDER BY Date) AS Total_Number_of_Bridges,
+        round(COUNT(DISTINCT id)/COUNT(DISTINCT user)) as Avg_Bridge_per_User,
+        avg(amount_usd) as Avg_Bridged_Volume
     FROM axelar_service
     WHERE created_at::date >= '{start_str}' 
       AND created_at::date <= '{end_str}'
@@ -346,44 +350,33 @@ def load_time_series_data(timeframe, start_date, end_date):
 # --- Load Data ----------------------------------------------------------------------------------------------------
 df_ts = load_time_series_data(timeframe, start_date, end_date)
 
-# --- Charts in One Row ---------------------------------------------------------------------------------------------
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 
 with col1:
-    fig1 = px.bar(
-        df_ts,
-        x="DATE",
-        y="VOLUME_OF_TRANSFERS",
-        title="Squid Bridge Volume Over Time (USD)",
-        labels={"VOLUME_OF_TRANSFERS": "Volume (USD)", "DATE": "Date"},
-        color_discrete_sequence=["#e2fb43"]
+    fig1 = go.Figure()
+    fig1.add_bar(x=df_ts["DATE"], y=df_ts["NUMBER_OF_BRIDGES"], name="Number of Bridges", yaxis="y1")
+    fig1.add_trace(go.Scatter(x=df_ts["DATE"], y=df_ts["TOTAL_NUMBER_OF_BRIDGES"], name="Total Number of Bridges", mode="lines+markers", yaxis="y2"))
+    fig1.update_layout(
+        title="Number of Bridges Over Time",
+        yaxis=dict(title="Txns count"),
+        yaxis2=dict(title="Txns count", overlaying="y", side="right"),
+        xaxis=dict(title=" "),
+        barmode="group"
     )
-    fig1.update_layout(xaxis_title="", yaxis_title="USD", bargap=0.2)
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
-    fig2 = px.bar(
-        df_ts,
-        x="DATE",
-        y="NUMBER_OF_TRANSFERS",
-        title="Squid Bridge Transactions Over Time",
-        labels={"NUMBER_OF_TRANSFERS": "Transactions", "DATE": "Date"},
-        color_discrete_sequence=["#e2fb43"]
+    fig2 = go.Figure()
+    fig2.add_bar(x=df_ts["DATE"], y=df_ts["BRIDGED_VOLUME"], name="Bridged Volume", yaxis="y1")
+    fig2.add_trace(go.Scatter(x=df_ts["DATE"], y=df_ts["TOTAL_BRIDGED_VOLUME"], name="Total Bridged Volume", mode="lines+markers", yaxis="y2"))
+    fig2.update_layout(
+        title="Volume of Transfers Over Time",
+        yaxis=dict(title="$USD"),
+        yaxis2=dict(title="$USD", overlaying="y", side="right"),
+        xaxis=dict(title=" "),
+        barmode="group"
     )
-    fig2.update_layout(xaxis_title="", yaxis_title="Txns", bargap=0.2)
     st.plotly_chart(fig2, use_container_width=True)
-
-with col3:
-    fig3 = px.bar(
-        df_ts,
-        x="DATE",
-        y="NUMBER_OF_USERS",
-        title="Squid Bridge Users Over Time",
-        labels={"NUMBER_OF_USERS": "Users", "DATE": "Date"},
-        color_discrete_sequence=["#e2fb43"]
-    )
-    fig3.update_layout(xaxis_title="", yaxis_title="Addresses", bargap=0.2)
-    st.plotly_chart(fig3, use_container_width=True)
 
 # ----------------------------------------------------------------------------------------------------------------------------
 # --- Query Function: Row (3) ------------------------------------------------------------------------------------------------
