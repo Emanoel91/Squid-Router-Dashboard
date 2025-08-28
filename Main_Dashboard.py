@@ -234,7 +234,7 @@ col3.metric(
     value=f"${df_kpi['AVERAGE_BRIDGED_VOLUME'][0]:,}"
 )
 
-# --- Query Function: Row (2) --------------------------------------------------------------------------------------
+# --- Query Function: Row (3) --------------------------------------------------------------------------------------
 @st.cache_data
 def load_time_series_data(timeframe, start_date, end_date):
     start_str = start_date.strftime("%Y-%m-%d")
@@ -361,7 +361,14 @@ with col1:
         yaxis=dict(title="Txns count"),
         yaxis2=dict(title="Txns count", overlaying="y", side="right"),
         xaxis=dict(title=" "),
-        barmode="group"
+        barmode="group",
+        legend=dict(
+        orientation="h",   # افقی کردن legend
+        yanchor="bottom",  # چسباندن به پایین باکس legend
+        y=1.05,            # بالای نمودار (کمی فاصله از محور x)
+        xanchor="center",  # وسط‌چین
+        x=0.5
+    )
     )
     st.plotly_chart(fig1, use_container_width=True)
 
