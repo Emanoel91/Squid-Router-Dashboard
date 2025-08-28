@@ -397,21 +397,38 @@ col1, col2 = st.columns(2)
 
 with col1:
     fig1 = go.Figure()
-    fig1.add_bar(x=df_ts["DATE"], y=df_ts["NUMBER_OF_BRIDGERS"], name="Number of Bridgers", yaxis="y1")
-    fig1.add_trace(go.Scatter(x=df_ts["DATE"], y=df_ts["AVG_BRIDGE_COUNT_PER_USER"], name="Avg Bridge Count per User", mode="lines+markers", yaxis="y2"))
+    fig1.add_trace(
+        go.Scatter(
+            x=df_ts["DATE"],
+            y=df_ts["NUMBER_OF_BRIDGERS"],
+            name="Number of Bridgers",
+            mode="lines+markers",
+            yaxis="y1"
+        )
+    )
+    
+    fig1.add_trace(
+        go.Scatter(
+            x=df_ts["DATE"],
+            y=df_ts["AVG_BRIDGE_COUNT_PER_USER"],
+            name="Avg Bridge Count per User",
+            mode="lines+markers",
+            yaxis="y2"
+        )
+    )
+
     fig1.update_layout(
         title="Number of Bridgers Over Time",
         yaxis=dict(title="User count"),
         yaxis2=dict(title="Txns count", overlaying="y", side="right"),
         xaxis=dict(title=" "),
-        barmode="group",
         legend=dict(
-        orientation="h",   
-        yanchor="bottom", 
-        y=1.05,           
-        xanchor="center",  
-        x=0.5
-    )
+            orientation="h",   
+            yanchor="bottom", 
+            y=1.05,           
+            xanchor="center",  
+            x=0.5
+        )
     )
     st.plotly_chart(fig1, use_container_width=True)
 
