@@ -181,7 +181,11 @@ def load_kpi_data(timeframe, start_date, end_date):
     SELECT 
         COUNT(DISTINCT id) AS Number_of_Transfers, 
         COUNT(DISTINCT user) AS Number_of_Users, 
-        ROUND(SUM(amount_usd)) AS Volume_of_Transfers
+        ROUND(SUM(amount_usd)) AS Volume_of_Transfers,
+        median(amount_usd) AS Median_Bridged_Volume,
+        max(amount_usd) AS Maximum_Bridged_Volume,
+        avg(amount_usd) AS Average_Bridged_Volume
+        
     FROM axelar_service
     WHERE created_at::date >= '{start_str}' 
       AND created_at::date <= '{end_str}'
@@ -193,22 +197,40 @@ def load_kpi_data(timeframe, start_date, end_date):
 # --- Load Data ----------------------------------------------------------------------------------------------------
 df_kpi = load_kpi_data(timeframe, start_date, end_date)
 
-# --- KPI Row ------------------------------------------------------------------------------------------------------
+# --- KPI Row (1) ------------------------------------------------------------------------------------------------------
 col1, col2, col3 = st.columns(3)
 
 col1.metric(
-    label="Volume of Transfers",
+    label="Bridged Volume",
     value=f"${df_kpi['VOLUME_OF_TRANSFERS'][0]:,}"
 )
 
 col2.metric(
-    label="Number of Transfers",
+    label="Total Bridges",
     value=f"{df_kpi['NUMBER_OF_TRANSFERS'][0]:,} Txns"
 )
 
 col3.metric(
-    label="Number of Users",
+    label="Total Bridgers",
     value=f"{df_kpi['NUMBER_OF_USERS'][0]:,} Addresses"
+)
+
+# --- KPI Row (2) ------------------------------------------------------------------------------------------------------
+col1, col2, col3 = st.columns(3)
+
+col1.metric(
+    label="Median Bridged Volume",
+    value=f"${df_kpi['Median_Bridged_Volume'][0]:,}"
+)
+
+col2.metric(
+    label="Maximum Bridged Volume",
+    value=f"${df_kpi['Maximum_Bridged_Volume'][0]:,}"
+)
+
+col3.metric(
+    label="Average Bridged Volume",
+    value=f"${df_kpi['Average_Bridged_Volume'][0]:,}"
 )
 
 # --- Query Function: Row (2) --------------------------------------------------------------------------------------
