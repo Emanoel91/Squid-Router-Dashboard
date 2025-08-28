@@ -725,31 +725,35 @@ top_txn_dest = df_dest.nlargest(10, "Number of Transfers").sort_values("Number o
 
 fig_vol_dest = px.bar(
     top_vol_dest,
-    x="Volume of Transfers (USD)",
-    y="Destination Chain",
-    orientation="h",
+    x="Destination Chain",
+    y="Volume of Transfers (USD)",
     title="Top 10 Destination Chains by Volume (USD)",
     labels={"Volume of Transfers (USD)": "USD", "Destination Chain": " "},
     color_discrete_sequence=["#ca99e5"]
 )
-fig_vol_dest.update_xaxes(tickformat=",.0f")
-fig_vol_dest.update_traces(hovertemplate="%{y}: $%{x:,.0f}<extra></extra>")
-fig_vol_dest.update_yaxes(autorange="reversed")  
+fig_vol_dest.update_yaxes(tickformat=",.0f")
+fig_vol_dest.update_traces(
+    text=top_vol_dest["Volume of Transfers (USD)"].apply(lambda x: f"${x:,.0f}"),
+    textposition="outside",
+    hovertemplate="%{x}: $%{y:,.0f}<extra></extra>"
+)
 
 fig_txn_dest = px.bar(
     top_txn_dest,
-    x="Number of Transfers",
-    y="Destination Chain",
-    orientation="h",
+    x="Destination Chain",
+    y="Number of Transfers",
     title="Top 10 Destination Chains by Transfers",
     labels={"Number of Transfers": "Txns count", "Destination Chain": " "},
     color_discrete_sequence=["#ca99e5"]
 )
-fig_txn_dest.update_xaxes(tickformat=",.0f")
-fig_txn_dest.update_traces(hovertemplate="%{y}: %{x:,}<extra></extra>")
-fig_txn_dest.update_yaxes(autorange="reversed")
+fig_txn_dest.update_yaxes(tickformat=",.0f")
+fig_txn_dest.update_traces(
+    text=top_txn_dest["Number of Transfers"].apply(lambda x: f"{x:,}"),
+    textposition="outside",
+    hovertemplate="%{x}: %{y:,}<extra></extra>"
+)
 
-# --- display three charts in one row -----------------------------------------------
+# --- display two charts in one row -----------------------------------------------
 col1, col2 = st.columns(2)
 with col1:
     st.plotly_chart(fig_vol_dest, use_container_width=True)
