@@ -571,23 +571,28 @@ col1, col2 = st.columns(2)
 with col1:
     fig1 = px.bar(
         top_vol.sort_values("Volume of Transfers (USD)"),
-        x="Volume of Transfers (USD)", y="Source Chain",
-        orientation="h",
+        x="Source Chain",
+        y="Volume of Transfers (USD)",
         title="Top 10 Source Chains by Volume (USD)",
         labels={"Volume of Transfers (USD)": "USD", "Source Chain": " "},
         color_discrete_sequence=["#ca99e5"]
     )
+
+    fig1.update_traces(text=top_vol.sort_values("Volume of Transfers (USD)")["Volume of Transfers (USD)"],
+                       textposition="outside")
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
     fig2 = px.bar(
         top_txn.sort_values("Number of Transfers"),
-        x="Number of Transfers", y="Source Chain",
-        orientation="h",
+        x="Source Chain",
+        y="Number of Transfers",
         title="Top 10 Source Chains by Transfers",
         labels={"Number of Transfers": "Txns count", "Source Chain": " "},
         color_discrete_sequence=["#ca99e5"]
     )
+    fig2.update_traces(text=top_txn.sort_values("Number of Transfers")["Number of Transfers"],
+                       textposition="outside")
     st.plotly_chart(fig2, use_container_width=True)
 
 # --- Destination Chain Data Query: Row 6 --------------------------------------------------------------------------------------------------------------
@@ -758,7 +763,7 @@ st.markdown(
     <div style="margin-top: 20px; margin-bottom: 20px; font-size: 16px;">
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
             <img src="https://cdn-icons-png.flaticon.com/512/3178/3178287.png" alt="Reference" style="width:20px; height:20px;">
-            <span>Dashboard Reference: <a href="https://flipsidecrypto.xyz/pine/squid-bridge-metrics-7jeGid" target="_blank">https://flipsidecrypto.xyz/pine/squid-bridge-metrics-7jeGid/</a></span>
+            <span>Dashboard Reference: <a href="https://flipsidecrypto.xyz/saeedmzn/squid-router-2024-Ljx-ap" target="_blank">https://flipsidecrypto.xyz/saeedmzn/squid-router-2024-Ljx-ap/</a></span>
         </div>
         <div style="display: flex; align-items: center; gap: 10px;">
             <img src="https://pbs.twimg.com/profile_images/1856738793325268992/OouKI10c_400x400.jpg" alt="Flipside" style="width:25px; height:25px; border-radius: 50%;">
@@ -773,14 +778,6 @@ st.markdown(
 st.markdown(
     """
     <div style="font-size: 16px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <img src="https://axelarscan.io/logos/logo.png" alt="Axelar" style="width:20px; height:20px;">
-            <a href="https://www.axelar.network/" target="_blank">Axelar Website</a>
-        </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <img src="https://axelarscan.io/logos/accounts/squid.svg" alt="Squid" style="width:20px; height:20px;">
-            <a href="https://www.squidrouter.com/" target="_blank">Squid Website</a>
-        </div>
         <div style="display: flex; align-items: center; gap: 10px;">
             <img src="https://axelarscan.io/logos/logo.png" alt="X" style="width:20px; height:20px;">
             <a href="https://x.com/axelar" target="_blank">Axelar X Account</a>
