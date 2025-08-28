@@ -363,10 +363,10 @@ with col1:
         xaxis=dict(title=" "),
         barmode="group",
         legend=dict(
-        orientation="h",   # افقی کردن legend
-        yanchor="bottom",  # چسباندن به پایین باکس legend
-        y=1.05,            # بالای نمودار (کمی فاصله از محور x)
-        xanchor="center",  # وسط‌چین
+        orientation="h",   
+        yanchor="bottom", 
+        y=1.05,           
+        xanchor="center",  
         x=0.5
     )
     )
@@ -381,7 +381,14 @@ with col2:
         yaxis=dict(title="$USD"),
         yaxis2=dict(title="$USD", overlaying="y", side="right"),
         xaxis=dict(title=" "),
-        barmode="group"
+        barmode="group",
+        legend=dict(
+        orientation="h",   
+        yanchor="bottom", 
+        y=1.05,           
+        xanchor="center",  
+        x=0.5
+    )
     )
     st.plotly_chart(fig2, use_container_width=True)
 
