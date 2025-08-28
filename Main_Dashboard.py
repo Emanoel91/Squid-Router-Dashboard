@@ -593,6 +593,7 @@ with col2:
     st.plotly_chart(fig2, use_container_width=True)
 
 
+
 # --- Destination Chain Data Query: Row 6 --------------------------------------------------------------------------------------------------------------
 @st.cache_data
 def load_destination_data(start_date, end_date):
