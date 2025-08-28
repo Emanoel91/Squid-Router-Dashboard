@@ -729,7 +729,7 @@ fig_vol_dest = px.bar(
     title="Top 10 Destination Chains by Bridged Volume (USD)",
     labels={"Volume of Transfers (USD)": "USD", "Destination Chain": " "},
     color_discrete_sequence=["#3f48cc"]
-)
+) 
 fig_vol_dest.update_yaxes(tickformat=",.0f")
 fig_vol_dest.update_traces(
     text=top_vol_dest["Volume of Transfers (USD)"].apply(lambda x: f"${x:,.0f}"),
