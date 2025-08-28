@@ -215,8 +215,8 @@ col3.metric(
     value=f"{df_kpi['NUMBER_OF_USERS'][0]:,} Addresses"
 )
 
+
 # --- KPI Row (2) ------------------------------------------------------------------------------------------------------
-df_kpi = load_kpi_data(timeframe, start_date, end_date)
 col1, col2, col3 = st.columns(3)
 
 col1.metric(
