@@ -182,9 +182,9 @@ def load_kpi_data(timeframe, start_date, end_date):
         COUNT(DISTINCT id) AS Number_of_Transfers, 
         COUNT(DISTINCT user) AS Number_of_Users, 
         ROUND(SUM(amount_usd)) AS Volume_of_Transfers,
-        median(amount_usd) AS Median_Bridged_Volume,
-        max(amount_usd) AS Maximum_Bridged_Volume,
-        avg(amount_usd) AS Average_Bridged_Volume
+        ROUND(median(amount_usd)) AS Median_Bridged_Volume,
+        ROUND(max(amount_usd)) AS Maximum_Bridged_Volume,
+        ROUND(avg(amount_usd)) AS Average_Bridged_Volume
         
     FROM axelar_service
     WHERE created_at::date >= '{start_str}' 
